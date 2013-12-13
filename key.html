@@ -1,0 +1,79 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Redis Key</title>
+</head>
+<body>
+    <h2>DEL</h2>
+    <p>删除单个 key</p>
+    <div>    
+        <a>redis> SET name rokey
+        <br>OK</a>
+        <br><br>
+        <a>redis> DEL name
+        <br>(integer) 1</a>
+    </div>
+    <hr>
+    <div>
+        <p>同时删除多个 key</p>
+        <a>redis> SET name "redis"
+        <br>OK</a>
+        <br><br>
+        <a>redis> SET type "key-value store"
+        <br>OK</a>
+        <br><br>
+        <a>redis> SET website "redis.com"
+        <br>OK</a>
+        <br><br>
+        <a>redis> DEL name type website
+        <br>(integer) 3</a>
+    </div>
+    <hr>
+
+    <h2>DUMP</h2>
+    <p>序列化给定 key ，并返回被序列化的值</p>
+    <div>       
+        <a>redis> SET greeting "hello, dumping world!"
+        <br>OK</a>
+        <br><br>
+        <a>redis> DUMP greeting
+        <br>"\x00\x15hello, dumping world!\x06\x00E\xa0Z\x82\xd8r\xc1\xde"</a>
+        <br><br>
+        <a>redis> DUMP not-exists-key
+        <br>(nil)</a>
+    </div>
+    <hr>
+
+    <h2>EXISTS</h2>
+    <p>检查给定 key 是否存在</p>
+    <div>       
+        <a>redis> SET db "redis"
+        <br>OK</a>
+        <br><br>
+        <a>redis> EXISTS db
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> DEL db
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> EXISTS db
+        <br>(integer) 0</a>
+    </div>
+    <hr>
+<!--
+    <h2>key</h2>
+    <p>comment</p>
+    <div>       
+        <a>
+        <br></a>
+        <br><br>
+        <a>
+        <br></a>
+        <br><br>
+        <a>
+        <br></a>
+    </div>
+    <hr>
+-->
+</body>
+</html>
