@@ -60,6 +60,65 @@
         <br>(integer) 0</a>
     </div>
     <hr>
+
+    <h2>EXPIRE</h2>
+    <p>为给定 key 设置生存时间，当 key 过期时(生存时间为 0 )，它会被自动删除</p>
+    <div>       
+        <a>redis> SET cache_page "www.google.com"
+        <br>OK</a>
+        <br><br>
+        <a>redis> EXPIRE cache_page 30 <font color = "red"># 设置过期时间为 30 秒</font>
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL cache_page <font color = "red"># 查看剩余生存时间</font>
+        <br>(integer) 23</a>
+        <br><br>
+        <a>redis> EXPIRE cache_page 30000 <font color = "red"># 更新过期时间</font>
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL cache_page
+        <br>(integer) 29996</a>
+    </div>
+    <hr>
+
+    <h2>EXPIREAT</h2>
+    <p>EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置生存时间。不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳</p>
+    <div>       
+        <a>redis> SET cache www.google.com
+        <br>OK</a>
+        <br><br>
+        <a>redis> EXPIREAT cache 1355292000 <font color = "red"># 这个 key 将在 2012.12.12 过期</font>
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL cache
+        <br>(integer) 45081860</a>
+    </div>
+    <hr>
+
+    <h2>KEYS</h2>
+    <p>查找所有符合给定模式的 key</p>
+    <div>       
+        <a>redis> MSET one 1 two 2 three 3 four 4 <font color = "red"># 一次设置 4 个 key</font>
+        <br>OK</a>
+        <br><br>
+        <a>redis> KEYS *o* <font color = "red"># KEYS h*llo 匹配 hllo 和 heeeeello 等</font>
+        <br>1) "four"</a>
+        <br>2) "two"</a>
+        <br>3) "one"</a>
+        <br><br>
+        <a>redis> KEYS t?? <font color = "red"># KEYS h?llo 匹配 hello ， hallo 和 hxllo 等</font>
+        <br>1) "two"</a>
+        <br><br>
+        <a>redis> KEYS t[w]* <font color = "red"># KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo</font>
+        <br>1) "two"</a>
+        <br><br>
+        <a>redis> KEYS * <font color = "red"># 匹配数据库内所有 key</font>
+        <br>1) "four"</a>
+        <br>2) "three"</a>
+        <br>3) "two"</a>
+        <br>4) "one"</a>
+    </div>
+    <hr>
 <!--
     <h2>key</h2>
     <p>comment</p>
@@ -72,6 +131,9 @@
         <br><br>
         <a>
         <br></a>
+        <br><br>
+        <a>
+        <br></a><font color = "red"># 备注</font>
     </div>
     <hr>
 -->
