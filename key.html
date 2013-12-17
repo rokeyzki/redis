@@ -119,6 +119,66 @@
         <br>4) "one"</a>
     </div>
     <hr>
+
+    <h2>MIGRATE</h2>
+    <p>将 key 原子性地从当前实例传送到目标实例的指定数据库上，一旦传送成功， key 保证会出现在目标实例上，而当前实例上的 key 会被删除</p>
+    <div>       
+        <a>
+        <br></a><font color = "red"># 未理解，暂不举例</font>
+    </div>
+    <hr>
+
+    <h2>MOVE</h2>
+    <p>将当前数据库的 key 移动到给定的数据库 db 当中，如果当前数据库和目标数据库有相同名字的给定 key ，或者 key 不存在于当前数据库，那么 MOVE 没有任何效果</p>
+    <div>       
+        <a>redis> SELECT 0 <font color = "red"># redis默认使用数据库 0，为了清晰起见，这里再显式指定一次</font>
+        <br>OK</a>
+        <br><br>
+        <a>redis> SET song "secret base - Zone"
+        <br>OK</a>
+        <br><br>
+        <a>redis> MOVE song 1 <font color = "red"># 将 song 移动到数据库 1</font>
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> EXISTS song <font color = "red"># song 已经被移走</font>
+        <br>(integer) 0</a>
+        <br><br>
+        <a>redis> SELECT 1 <font color = "red"># 使用数据库 1</font>
+        <br>OK</a>
+        <br><br>
+        <a>redis:1> EXISTS song <font color = "red"># 证实 song 被移到了数据库 1 (注意命令提示符变成了"redis:1"，表明正在使用数据库 1)</font>
+        <br>(integer) 1</a>
+    </div>
+    <hr>
+
+    <h2>OBJECT</h2>
+    <p>OBJECT 命令允许从内部察看给定 key 的 Redis 对象</p>
+    <div>       
+        <a>
+        <br></a><font color = "red"># 未理解，暂不举例</font>
+    </div>
+    <hr>
+
+    <h2>PERSIST</h2>
+    <p>移除给定 key 的生存时间，将这个 key 从『易失的』(带生存时间 key )转换成『持久的』(一个不带生存时间、永不过期的 key )</p>
+    <div>       
+        <a>redis> SET mykey "Hello"
+        <br>OK</a>
+        <br><br>
+        <a>redis> EXPIRE mykey 10 <font color = "red"># 为 key 设置生存时间</font>
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL mykey
+        <br>(integer) 10</a>
+        <br><br>
+        <a>redis> PERSIST mykey <font color = "red"># 移除 key 的生存时间</font>
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL mykey
+        <br>(integer) -1</a>
+        <br><br>
+    </div>
+    <hr>
 <!--
     <h2>key</h2>
     <p>comment</p>
