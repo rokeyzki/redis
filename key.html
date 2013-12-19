@@ -179,21 +179,210 @@
         <br><br>
     </div>
     <hr>
+
+    <h2>PEXPIRE</h2>
+    <p>这个命令和 EXPIRE 命令的作用类似，但是它以毫秒为单位设置 key 的生存时间，而不像 EXPIRE 命令那样，以秒为单位</p>
+    <div>       
+        <a>redis> SET mykey "Hello"
+        <br>OK</a>
+        <br><br>
+        <a>PEXPIRE mykey 1500
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL mykey <font color = "red"># TTL 的返回值以秒为单位</font>
+        <br>(integer) 2</a>
+        <br><br>
+        <a>redis> PTTL mykey <font color = "red"># PTTL 可以给出准确的毫秒数</font>
+        <br>(integer) 1499</a>
+    </div>
+    <hr>
+
+    <h2>PEXPIREAT</h2>
+    <p>这个命令和 EXPIREAT 命令类似，但它以毫秒为单位设置 key 的过期 unix 时间戳，而不是像 EXPIREAT 那样，以秒为单位</p>
+    <div>       
+        <a>redis> SET mykey "Hello"
+        <br>OK</a>
+        <br><br>
+        <a>redis> PEXPIREAT mykey 1555555555005
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL mykey <font color = "red"># TTL 返回秒</font>
+        <br>(integer) 223157079</a>
+        <br><br>
+        <a>redis> PTTL mykey <font color = "red"># PTTL 返回毫秒</font>
+        <br>(integer) 223157079318</a>
+    </div>
+    <hr>
+
+    <h2>PTTL</h2>
+    <p>这个命令类似于 TTL 命令，但它以毫秒为单位返回 key 的剩余生存时间，而不是像 TTL 命令那样，以秒为单位。当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以毫秒为单位，返回 key 的剩余生存时间。在 Redis 2.8 以前，当 key 不存在，或者 key 没有设置剩余生存时间时，命令都返回 -1</p>
+    <div>       
+        <a>redis> PEXPIRE key 10086
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> PTTL key
+        <br>(integer) 6179</a>
+    </div>
+    <hr>
+
+    <h2>RANDOMKEY</h2>
+    <p>从当前数据库中随机返回(不删除)一个 key。当数据库不为空时，返回一个 key 。当数据库为空时，返回 nil</p>
+    <div>       
+        <a>redis> MSET fruit "apple" drink "beer" food "cookies" <font color = "red"># 设置多个 key</font>
+        <br>OK</a>
+        <br><br>
+        <a>redis> RANDOMKEY
+        <br>"fruit"</a>
+        <br><br>
+        <a>redis> RANDOMKEY
+        <br>"food"</a>
+    </div>
+    <hr>
+
+    <h2>RENAME</h2>
+    <p>将 key 改名为 newkey 。当 key 和 newkey 相同，或者 key 不存在时，返回一个错误。</p>
+    <div>       
+        <a>redis> SET pc "lenovo"
+        <br>OK</a>
+        <br><br>
+        <a>redis> SET personal_computer "dell"
+        <br>OK</a>
+        <br><br>
+        <a>redis> RENAME pc personal_computer <font color = "red"># newkey 已存在时， RENAME 会覆盖旧 newkey</font>
+        <br>OK</a>
+        <br><br>
+        <a>redis> GET pc
+        <br>(nil)</a>
+        <br><br>
+        <a>redis:1> GET personal_computer <font color = "red"># 原来的值 dell 被覆盖了</font>
+        <br>"lenovo"</a>
+    </div>
+    <hr>
+
+    <h2>RENAMENX</h2>
+    <p>当且仅当 newkey 不存在时，将 key 改名为 newkey。当 key 不存在时，返回一个错误。修改成功时，返回 1 。如果 newkey 已经存在，返回 0 </p>
+    <div>       
+        <a>redis> SET player "MPlyaer"
+        <br>OK</a>
+        <br><br>
+        <a>redis> EXISTS best_player
+        <br>(integer) 0</a>
+        <br><br>
+        <a>redis> RENAMENX player best_player
+        <br>(integer) 1</a>
+    </div>
+    <hr>
+
+    <h2>RESTORE</h2>
+    <p>反序列化给定的序列化值，并将它和给定的 key 关联</p>
+    <div>       
+        <a>
+        <br></a><font color = "red"># 未理解，暂不举例</font>
+    </div>
+    <hr>
+
+    <h2>SORT</h2>
+    <p>返回或保存给定列表、集合、有序集合 key 中经过排序的元素</p>
+    <div>
+        <h5 style="color:blue">一般用法</h5>       
+        <a>redis> LPUSH today_cost 30 1.5 10 8 <font color = "red"># 开销金额列表</font>
+        <br>(integer) 4</a>
+        <br><br>
+        <a>redis> SORT today_cost <font color = "red"># 默认（按数字）排序</font>
+        <br>1) "1.5"</a>
+        <br>2) "8"</a>
+        <br>3) "10"</a>
+        <br>4) "30"</a>
+        <br><br>
+        <a>redis 127.0.0.1:6379> SORT today_cost DESC <font color = "red"># 逆序排序</font>
+        <br>1) "30"</a>
+        <br>2) "10"</a>
+        <br>3) "8"</a>
+        <br>4) "1.5"</a>
+        <br><br>
+        <h5 style="color:blue">使用 ALPHA 修饰符</h5>
+        <a>redis> SORT website ALPHA <font color = "red"># 按字符排序</font>
+        <br>1) "www.infoq.com"</a>
+        <br>2) "www.reddit.com"</a>
+        <br>3) "www.slashdot.com"</a>
+        <br><br> 
+        <h5 style="color:blue">使用 LIMIT 修饰符</h5>
+        <a>redis 127.0.0.1:6379> RPUSH rank 1 3 5 7 9 <font color = "red"># 添加测试数据，列表值为 1 指 10</font>
+        <br>(integer) 5</a>
+        <br><br> 
+        <a>redis 127.0.0.1:6379> RPUSH rank 2 4 6 8 10
+        <br>(integer) 10</a>
+        <br><br>
+        <a>redis 127.0.0.1:6379> SORT rank LIMIT 0 5 <font color = "red"># 返回列表中最小的 5 个值</font>
+        <br>1) "1"</a>
+        <br>2) "2"</a>
+        <br>3) "3"</a>
+        <br>4) "4"</a>
+        <br>5) "5"</a>
+        <br><br>
+        <a>redis 127.0.0.1:6379> SORT rank LIMIT 0 5 DESC <font color = "red"># 逆序排序 返回列表中最大的 5 个值</font>
+        <br>1) "10"</a>
+        <br>2) "9"</a>
+        <br>3) "8"</a>
+        <br>4) "7"</a>
+        <br>5) "6"</a>
+        <br><br> 
+        <table border="1">
+            <tr>
+                <td>uid</td><td>user_name_{uid}</td><td>user_level_{uid}</td>
+            </tr>
+            <tr>
+                <td>1</td><td>admin</td><td>9999</td>
+            </tr>
+            <tr>
+                <td>2</td><td>jack</td><td>10</td>
+            </tr>
+            <tr>
+                <td>3</td><td>peter</td><td>25</td>
+            </tr>
+            <tr>
+                <td>4</td><td>mary</td><td>70</td>
+            </tr>
+        </table> <font color = "red">注释：以下修饰符需要使用的示例表</font>
+        <h5 style="color:blue">使用 BY 修饰符</h5>
+        <a>redis 127.0.0.1:6379> SORT uid BY user_level_* <font color = "red"># 通过使用 BY 选项，可以让 uid 按其他键的元素来排序</font>
+        <br>1) "2"      # jack , level = 10</a>
+        <br>2) "3"      # peter, level = 25</a>
+        <br>3) "4"      # mary, level = 70</a>
+        <br>4) "1"      # admin, level = 9999</a>
+        <br><br> 
+        <h5 style="color:blue">使用 GET 修饰符</h5>
+        <a>redis 127.0.0.1:6379> SORT uid GET user_name_* <font color = "red"># 使用 GET 选项， 可以根据排序的结果来取出相应的键值</font>
+        <br>1) "admin"</a>
+        <br>2) "jack"</a>
+        <br>3) "peter"</a>
+        <br>4) "mary"</a>
+        <br><br> 
+        <h5 style="color:blue">组合使用 BY 和 GET</h5>
+        <a>redis 127.0.0.1:6379> SORT uid BY user_level_* GET user_name_* <font color = "red"># 通过组合使用 BY 和 GET ， 可以让排序结果以更直观的方式显示出来</font>
+        <br>1) "jack"       # level = 10</a>
+        <br>2) "peter"      # level = 25</a>
+        <br>3) "mary"       # level = 70</a>
+        <br>4) "admin"      # level = 9999</a>
+        <br><br>
+        <p>SORT 未完待续。。。</p>
+    </div>
+    <hr>
 <!--
     <h2>key</h2>
     <p>comment</p>
     <div>       
-        <a>
+        <a> <font color = "red"># 备注</font>
         <br></a>
         <br><br>
-        <a>
+        <a> <font color = "red"># 备注</font>
         <br></a>
         <br><br>
-        <a>
+        <a> <font color = "red"># 备注</font>
         <br></a>
         <br><br>
-        <a>
-        <br></a><font color = "red"># 备注</font>
+        <a> <font color = "red"># 备注</font>
+        <br></a>
     </div>
     <hr>
 -->
