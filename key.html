@@ -368,6 +368,35 @@
         <p>SORT 未完待续。。。</p>
     </div>
     <hr>
+
+    <h2>TTL</h2>
+    <p>以秒为单位，返回给定 key 的剩余生存时间。当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以秒为单位，返回 key 的剩余生存时间。在 Redis 2.8 以前，当 key 不存在，或者 key 没有设置剩余生存时间时，命令都返回 -1</p>
+    <div>       
+        <a>redis> EXPIRE key 10086
+        <br>(integer) 1</a>
+        <br><br>
+        <a>redis> TTL key
+        <br>(integer) 10084</a>
+    </div>
+    <hr>
+
+    <h2>TYPE</h2>
+    <p>返回 key 所储存的值的类型。none (key不存在)\string (字符串)\list (列表)\set (集合)\zset (有序集)\hash (哈希表)</p>
+    <div>       
+        <a>redis> SET weather "sunny"
+        <br>OK</a>
+        <br><br>
+        <a>redis> TYPE weather
+        <br>string</a>
+    </div>
+    <hr>
+
+    <h2>SCAN</h2>
+    <p>用于迭代当前数据库中的数据库键。</p>
+    <div>       
+        <p>SCAN 未完待续。。。</p>
+    </div>
+    <hr>
 <!--
     <h2>key</h2>
     <p>comment</p>
