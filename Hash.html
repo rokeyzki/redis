@@ -1,0 +1,220 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Redis Hash 哈希表</title>
+</head>
+<body>
+
+    <h2>HDEL</h2>
+    <p>删除哈希表 key 中的一个或多个指定域，不存在的域将被忽略</p>
+    <div>       
+        <a>redis> HGETALL abbr <font color = "red"># 测试数据</font></a>
+        <br>1) "a"
+        <br>2) "apple"
+        <br>3) "b"
+        <br>4) "banana"
+        <br>5) "c"
+        <br>6) "cat"
+        <br>7) "d"
+        <br>8) "dog"
+        <br><br>
+        <a>redis> HDEL abbr a <font color = "red"># 删除单个域</font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HDEL abbr b c <font color = "red"># 删除多个域</font></a>
+        <br>(integer) 2
+        <br><br>
+        <a>redis> HGETALL abbr <font color = "red"></font></a>
+        <br>1) "d"
+        <br>2) "dog"
+    </div>
+    <hr>
+
+    <h2>HEXISTS</h2>
+    <p>查看哈希表 key 中，给定域 field 是否存在</p>
+    <div>       
+        <a>redis> HEXISTS phone myphone <font color = "red"></font></a>
+        <br>(integer) 0
+        <br><br>
+        <a>redis> HSET phone myphone nokia-1110 <font color = "red"></font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HEXISTS phone myphone <font color = "red"></font></a>
+        <br>(integer) 1
+    </div>
+    <hr>
+
+    <h2>HGET</h2>
+    <p>返回哈希表 key 中给定域 field 的值</p>
+    <div>       
+        <a>redis> HSET site redis redis.com <font color = "red"># 域存在</font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HGET site redis <font color = "red"></font></a>
+        <br>"redis.com"
+        <br><br>
+        <a>redis> HGET site mysql <font color = "red"># 域不存在</font></a>
+        <br>(nil)
+    </div>
+    <hr>
+    
+    <h2>HGETALL</h2>
+    <p>返回哈希表 key 中，所有的域和值</p>
+    <div>       
+        <a>redis> HSET people jack "Jack Sparrow" <font color = "red"></font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HSET people gump "Forrest Gump" <font color = "red"></font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HGETALL people <font color = "red"></font></a>
+        <br>1) "jack"
+        <br>2) "Jack Sparrow"
+        <br>3) "gump"
+        <br>4) "Forrest Gump"
+    </div>
+    <hr>
+
+    <h2>HINCRBY</h2>
+    <p>为哈希表 key 中的域 field 的值加上增量 increment</p>
+    <div>       
+        <a>redis> HEXISTS counter page_view <font color = "red"></font></a>
+        <br>(integer) 0
+        <br><br>
+        <a>redis> HINCRBY counter page_view 200 <font color = "red"># increment 为正数</font></a>
+        <br>(integer) 200
+        <br><br>
+        <a>redis> HGET counter page_view <font color = "red"></font></a>
+        <br>"200"
+        <br><br>
+        <a>redis> HINCRBY counter page_view -50 <font color = "red"># increment 为负数</font></a>
+        <br>(integer) 150
+        <br><br>
+        <a>redis> HGET counter page_view <font color = "red"></font></a>
+        <br>"150"
+    </div>
+    <hr>
+
+    <h2>HINCRBYFLOAT</h2>
+    <p>为哈希表 key 中的域 field 加上浮点数增量 increment</p>
+    <div>       
+        <a>redis> HSET mykey field 10.50 <font color = "red"># 值和增量都是普通小数</font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HINCRBYFLOAT mykey field 0.1 <font color = "red"></font></a>
+        <br>"10.6"
+    </div>
+    <hr>
+
+    <h2>HKEYS</h2>
+    <p>返回哈希表 key 中的所有域</p>
+    <div>       
+        <a>redis> HMSET website google www.google.com yahoo www.yahoo.com <font color = "red"># 哈希表非空</font></a>
+        <br>OK
+        <br><br>
+        <a>redis> HKEYS website <font color = "red"></font></a>
+        <br>1) "google"
+        <br>2) "yahoo"
+    </div>
+    <hr>
+
+    <h2>HLEN</h2>
+    <p>返回哈希表 key 中域的数量</p>
+    <div>       
+        <a>redis> HSET db redis redis.com <font color = "red"></font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HSET db mysql mysql.com <font color = "red"></font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HLEN db <font color = "red"></font></a>
+        <br>(integer) 2
+        <br><br>
+        <a>redis> HSET db mongodb mongodb.org <font color = "red"></font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HLEN db <font color = "red"></font></a>
+        <br>(integer) 3
+    </div>
+    <hr>
+
+    <h2>HMGET</h2>
+    <p>返回哈希表 key 中，一个或多个给定域的值</p>
+    <div>       
+        <a>redis> HMSET pet dog "doudou" cat "nounou"  <font color = "red"># 一次设置多个域</font></a>
+        <br>OK
+        <br><br>
+        <a>redis> HMGET pet dog cat fake_pet <font color = "red"># 返回值的顺序和传入参数的顺序一样</font></a>
+        <br>1) "doudou"
+        <br>2) "nounou"
+        <br>3) (nil)
+    </div>
+    <hr>
+
+    <h2>HMSET</h2>
+    <p>同时将多个 field-value (域-值)对设置到哈希表 key 中</p>
+    <div>       
+        <a>redis> HMSET website google www.google.com yahoo www.yahoo.com <font color = "red"></font></a>
+        <br>OK
+        <br><br>
+        <a>redis> HGET website google <font color = "red"></font></a>
+        <br>"www.google.com"
+        <br><br>
+        <a>redis> HGET website yahoo <font color = "red"></font></a>
+        <br>"www.yahoo.com"
+    </div>
+    <hr>
+
+    <h2>HSET</h2>
+    <p>将哈希表 key 中的域 field 的值设为 value</p>
+    <div>       
+        <a>redis> HSET website google "www.g.cn" <font color = "red"># 设置一个新域</font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HSET website google "www.google.com" <font color = "red"># 覆盖一个旧域</font></a>
+        <br>(integer) 0
+    </div>
+    <hr>
+
+    <h2>HSETNX</h2>
+    <p>将哈希表 key 中的域 field 的值设置为 value ，当且仅当域 field 不存在</p>
+    <div>       
+        <a>redis> HSETNX nosql key-value-store redis <font color = "red"></font></a>
+        <br>(integer) 1
+        <br><br>
+        <a>redis> HSETNX nosql key-value-store redis <font color = "red"># 操作无效，域 key-value-store 已存在</font></a>
+        <br>(integer) 0
+    </div>
+    <hr>
+
+    <h2>HVALS</h2>
+    <p>返回哈希表 key 中所有域的值</p>
+    <div>       
+        <a>redis> HMSET website google www.google.com yahoo www.yahoo.com <font color = "red"></font></a>
+        <br>OK
+        <br><br>
+        <a>redis> HVALS website <font color = "red"></font></a>
+        <br>1) "www.google.com"
+        <br>2) "www.yahoo.com"
+    </div>
+    <hr>
+<!--
+    <h2>key</h2>
+    <p>comment</p>
+    <div>       
+        <a> <font color = "red"></font></a>
+        <br>
+        <br><br>
+        <a> <font color = "red"></font></a>
+        <br>
+        <br><br>
+        <a> <font color = "red"></font></a>
+        <br>
+        <br><br>
+        <a> <font color = "red"></font></a>
+        <br>
+    </div>
+    <hr>
+-->
+</body>
+</html>
