@@ -4,414 +4,431 @@
     <title>Redis Key 键</title>
 </head>
 <body>
-    <h2>DEL</h2>
-    <p>删除单个 key</p>
-    <div>    
-        <a>redis> SET name rokey
-        <br>OK</a>
-        <br><br>
-        <a>redis> DEL name
-        <br>(integer) 1</a>
-    </div>
-    <hr>
-    <div>
-        <p>同时删除多个 key</p>
-        <a>redis> SET name "redis"
-        <br>OK</a>
-        <br><br>
-        <a>redis> SET type "key-value store"
-        <br>OK</a>
-        <br><br>
-        <a>redis> SET website "redis.com"
-        <br>OK</a>
-        <br><br>
-        <a>redis> DEL name type website
-        <br>(integer) 3</a>
-    </div>
-    <hr>
 
-    <h2>DUMP</h2>
-    <p>序列化给定 key ，并返回被序列化的值</p>
-    <div>       
-        <a>redis> SET greeting "hello, dumping world!"
-        <br>OK</a>
-        <br><br>
-        <a>redis> DUMP greeting
-        <br>"\x00\x15hello, dumping world!\x06\x00E\xa0Z\x82\xd8r\xc1\xde"</a>
-        <br><br>
-        <a>redis> DUMP not-exists-key
-        <br>(nil)</a>
-    </div>
-    <hr>
+    <h2 style="color:blue;">INSERT</h2>
+    
+        <p>None</p>
 
-    <h2>EXISTS</h2>
-    <p>检查给定 key 是否存在</p>
-    <div>       
-        <a>redis> SET db "redis"
-        <br>OK</a>
-        <br><br>
-        <a>redis> EXISTS db
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> DEL db
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> EXISTS db
-        <br>(integer) 0</a>
-    </div>
     <hr>
+    <h2 style="color:blue;">DELETE</h2>
+    
+        <h2>DEL</h2>
+        <p>删除单个 key</p>
+        <div>    
+            <a>redis> SET name rokey </a>
+            <br>OK
+            <br><br>
+            <a>redis> DEL name </a>
+            <br>(integer) 1
+        </div>
+        <hr>
+        <div>
+            <p>同时删除多个 key</p>
+            <a>redis> SET name "redis" </a>
+            <br>OK
+            <br><br>
+            <a>redis> SET type "key-value store" </a>
+            <br>OK
+            <br><br>
+            <a>redis> SET website "redis.com" </a>
+            <br>OK
+            <br><br>
+            <a>redis> DEL name type website </a>
+            <br>(integer) 3
+        </div>
+        <hr>
+        
+        <h2>EXPIRE</h2>
+        <p>为给定 key 设置生存时间，当 key 过期时(生存时间为 0 )，它会被自动删除</p>
+        <div>       
+            <a>redis> SET cache_page "www.google.com" </a>
+            <br>OK
+            <br><br>
+            <a>redis> EXPIRE cache_page 30 <font color = "red"># 设置过期时间为 30 秒</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> TTL cache_page <font color = "red"># 查看剩余生存时间</font></a>
+            <br>(integer) 23
+            <br><br>
+            <a>redis> EXPIRE cache_page 30000 <font color = "red"># 更新过期时间</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> TTL cache_page</a>
+            <br>(integer) 29996
+        </div>
+        <hr>
 
-    <h2>EXPIRE</h2>
-    <p>为给定 key 设置生存时间，当 key 过期时(生存时间为 0 )，它会被自动删除</p>
-    <div>       
-        <a>redis> SET cache_page "www.google.com"
-        <br>OK</a>
-        <br><br>
-        <a>redis> EXPIRE cache_page 30 <font color = "red"># 设置过期时间为 30 秒</font>
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL cache_page <font color = "red"># 查看剩余生存时间</font>
-        <br>(integer) 23</a>
-        <br><br>
-        <a>redis> EXPIRE cache_page 30000 <font color = "red"># 更新过期时间</font>
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL cache_page
-        <br>(integer) 29996</a>
-    </div>
-    <hr>
+        <h2>EXPIREAT</h2>
+        <p>EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置生存时间。不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳</p>
+        <div>       
+            <a>redis> SET cache www.google.com </a>
+            <br>OK
+            <br><br>
+            <a>redis> EXPIREAT cache 1355292000 <font color = "red"># 这个 key 将在 2012.12.12 过期</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> TTL cache </a>
+            <br>(integer) 45081860
+        </div>
+        <hr>
 
-    <h2>EXPIREAT</h2>
-    <p>EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置生存时间。不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳</p>
-    <div>       
-        <a>redis> SET cache www.google.com
-        <br>OK</a>
-        <br><br>
-        <a>redis> EXPIREAT cache 1355292000 <font color = "red"># 这个 key 将在 2012.12.12 过期</font>
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL cache
-        <br>(integer) 45081860</a>
-    </div>
-    <hr>
+        <h2>PEXPIRE</h2>
+        <p>这个命令和 EXPIRE 命令的作用类似，但是它以毫秒为单位设置 key 的生存时间，而不像 EXPIRE 命令那样，以秒为单位</p>
+        <div>       
+            <a>redis> SET mykey "Hello" </a>
+            <br>OK
+            <br><br>
+            <a>PEXPIRE mykey 1500 </a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> TTL mykey <font color = "red"># TTL 的返回值以秒为单位</font></a>
+            <br>(integer) 2
+            <br><br>
+            <a>redis> PTTL mykey <font color = "red"># PTTL 可以给出准确的毫秒数</font></a>
+            <br>(integer) 1499
+        </div>
+        <hr>
 
-    <h2>KEYS</h2>
-    <p>查找所有符合给定模式的 key</p>
-    <div>       
-        <a>redis> MSET one 1 two 2 three 3 four 4 <font color = "red"># 一次设置 4 个 key</font>
-        <br>OK</a>
-        <br><br>
-        <a>redis> KEYS *o* <font color = "red"># KEYS h*llo 匹配 hllo 和 heeeeello 等</font>
-        <br>1) "four"</a>
-        <br>2) "two"</a>
-        <br>3) "one"</a>
-        <br><br>
-        <a>redis> KEYS t?? <font color = "red"># KEYS h?llo 匹配 hello ， hallo 和 hxllo 等</font>
-        <br>1) "two"</a>
-        <br><br>
-        <a>redis> KEYS t[w]* <font color = "red"># KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo</font>
-        <br>1) "two"</a>
-        <br><br>
-        <a>redis> KEYS * <font color = "red"># 匹配数据库内所有 key</font>
-        <br>1) "four"</a>
-        <br>2) "three"</a>
-        <br>3) "two"</a>
-        <br>4) "one"</a>
-    </div>
-    <hr>
+        <h2>PEXPIREAT</h2>
+        <p>这个命令和 EXPIREAT 命令类似，但它以毫秒为单位设置 key 的过期 unix 时间戳，而不是像 EXPIREAT 那样，以秒为单位</p>
+        <div>       
+            <a>redis> SET mykey "Hello" </a>
+            <br>OK
+            <br><br>
+            <a>redis> PEXPIREAT mykey 1555555555005 </a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> TTL mykey <font color = "red"># TTL 返回秒</font></a>
+            <br>(integer) 223157079
+            <br><br>
+            <a>redis> PTTL mykey <font color = "red"># PTTL 返回毫秒</font></a>
+            <br>(integer) 223157079318
+        </div>
+        <hr>
 
-    <h2>MIGRATE</h2>
-    <p>将 key 原子性地从当前实例传送到目标实例的指定数据库上，一旦传送成功， key 保证会出现在目标实例上，而当前实例上的 key 会被删除</p>
-    <div>       
-        <a>
-        <br></a><font color = "red"># 未理解，暂不举例</font>
-    </div>
     <hr>
+    <h2 style="color:blue;">UPDATE</h2>
+    
+        <h2>DUMP</h2>
+        <p>序列化给定 key ，并返回被序列化的值</p>
+        <div>       
+            <a>redis> SET greeting "hello, dumping world!" </a>
+            <br>OK
+            <br><br>
+            <a>redis> DUMP greeting </a>
+            <br>"\x00\x15hello, dumping world!\x06\x00E\xa0Z\x82\xd8r\xc1\xde"
+            <br><br>
+            <a>redis> DUMP not-exists-key </a>
+            <br>(nil)
+        </div>
+        <hr>
 
-    <h2>MOVE</h2>
-    <p>将当前数据库的 key 移动到给定的数据库 db 当中，如果当前数据库和目标数据库有相同名字的给定 key ，或者 key 不存在于当前数据库，那么 MOVE 没有任何效果</p>
-    <div>       
-        <a>redis> SELECT 0 <font color = "red"># redis默认使用数据库 0，为了清晰起见，这里再显式指定一次</font>
-        <br>OK</a>
-        <br><br>
-        <a>redis> SET song "secret base - Zone"
-        <br>OK</a>
-        <br><br>
-        <a>redis> MOVE song 1 <font color = "red"># 将 song 移动到数据库 1</font>
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> EXISTS song <font color = "red"># song 已经被移走</font>
-        <br>(integer) 0</a>
-        <br><br>
-        <a>redis> SELECT 1 <font color = "red"># 使用数据库 1</font>
-        <br>OK</a>
-        <br><br>
-        <a>redis:1> EXISTS song <font color = "red"># 证实 song 被移到了数据库 1 (注意命令提示符变成了"redis:1"，表明正在使用数据库 1)</font>
-        <br>(integer) 1</a>
-    </div>
-    <hr>
+        <h2>MOVE</h2>
+        <p>将当前数据库的 key 移动到给定的数据库 db 当中，如果当前数据库和目标数据库有相同名字的给定 key ，或者 key 不存在于当前数据库，那么 MOVE 没有任何效果</p>
+        <div>       
+            <a>redis> SELECT 0 <font color = "red"># redis默认使用数据库 0，为了清晰起见，这里再显式指定一次</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> SET song "secret base - Zone" </a>
+            <br>OK
+            <br><br>
+            <a>redis> MOVE song 1 <font color = "red"># 将 song 移动到数据库 1</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> EXISTS song <font color = "red"># song 已经被移走</font></a>
+            <br>(integer) 0
+            <br><br>
+            <a>redis> SELECT 1 <font color = "red"># 使用数据库 1</font></a>
+            <br>OK
+            <br><br>
+            <a>redis:1> EXISTS song <font color = "red"># 证实 song 被移到了数据库 1 (注意命令提示符变成了"redis:1"，表明正在使用数据库 1)</font></a>
+            <br>(integer) 1
+        </div>
+        <hr>
 
-    <h2>OBJECT</h2>
-    <p>OBJECT 命令允许从内部察看给定 key 的 Redis 对象</p>
-    <div>       
-        <a>
-        <br></a><font color = "red"># 未理解，暂不举例</font>
-    </div>
-    <hr>
+        <h2>PERSIST</h2>
+        <p>移除给定 key 的生存时间，将这个 key 从『易失的』(带生存时间 key )转换成『持久的』(一个不带生存时间、永不过期的 key )</p>
+        <div>       
+            <a>redis> SET mykey "Hello" </a>
+            <br>OK
+            <br><br>
+            <a>redis> EXPIRE mykey 10 <font color = "red"># 为 key 设置生存时间</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> TTL mykey </a>
+            <br>(integer) 10
+            <br><br>
+            <a>redis> PERSIST mykey <font color = "red"># 移除 key 的生存时间</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> TTL mykey </a>
+            <br>(integer) -1
+            <br><br>
+        </div>
+        <hr>
 
-    <h2>PERSIST</h2>
-    <p>移除给定 key 的生存时间，将这个 key 从『易失的』(带生存时间 key )转换成『持久的』(一个不带生存时间、永不过期的 key )</p>
-    <div>       
-        <a>redis> SET mykey "Hello"
-        <br>OK</a>
-        <br><br>
-        <a>redis> EXPIRE mykey 10 <font color = "red"># 为 key 设置生存时间</font>
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL mykey
-        <br>(integer) 10</a>
-        <br><br>
-        <a>redis> PERSIST mykey <font color = "red"># 移除 key 的生存时间</font>
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL mykey
-        <br>(integer) -1</a>
-        <br><br>
-    </div>
-    <hr>
+        <h2>RENAMENX</h2>
+        <p>当且仅当 newkey 不存在时，将 key 改名为 newkey。当 key 不存在时，返回一个错误。修改成功时，返回 1 。如果 newkey 已经存在，返回 0 </p>
+        <div>       
+            <a>redis> SET player "MPlyaer" </a>
+            <br>OK
+            <br><br>
+            <a>redis> EXISTS best_player </a>
+            <br>(integer) 0
+            <br><br>
+            <a>redis> RENAMENX player best_player </a>
+            <br>(integer) 1
+        </div>
+        <hr>
 
-    <h2>PEXPIRE</h2>
-    <p>这个命令和 EXPIRE 命令的作用类似，但是它以毫秒为单位设置 key 的生存时间，而不像 EXPIRE 命令那样，以秒为单位</p>
-    <div>       
-        <a>redis> SET mykey "Hello"
-        <br>OK</a>
-        <br><br>
-        <a>PEXPIRE mykey 1500
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL mykey <font color = "red"># TTL 的返回值以秒为单位</font>
-        <br>(integer) 2</a>
-        <br><br>
-        <a>redis> PTTL mykey <font color = "red"># PTTL 可以给出准确的毫秒数</font>
-        <br>(integer) 1499</a>
-    </div>
+        <h2>RENAME</h2>
+        <p>将 key 改名为 newkey 。当 key 和 newkey 相同，或者 key 不存在时，返回一个错误。</p>
+        <div>       
+            <a>redis> SET pc "lenovo" </a>
+            <br>OK
+            <br><br>
+            <a>redis> SET personal_computer "dell" </a>
+            <br>OK
+            <br><br>
+            <a>redis> RENAME pc personal_computer <font color = "red"># newkey 已存在时， RENAME 会覆盖旧 newkey</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> GET pc </a>
+            <br>(nil)
+            <br><br>
+            <a>redis:1> GET personal_computer <font color = "red"># 原来的值 dell 被覆盖了</font></a>
+            <br>"lenovo"
+        </div>
+        <hr>
+    
     <hr>
+    <h2 style="color:blue;">SELECT</h2>
+    
+        <h2>EXISTS</h2>
+        <p>检查给定 key 是否存在</p>
+        <div>       
+            <a>redis> SET db "redis" </a>
+            <br>OK
+            <br><br>
+            <a>redis> EXISTS db </a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> DEL db </a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> EXISTS db </a>
+            <br>(integer) 0
+        </div>
+        <hr>
+        
+        <h2>KEYS</h2>
+        <p>查找所有符合给定模式的 key</p>
+        <div>       
+            <a>redis> MSET one 1 two 2 three 3 four 4 <font color = "red"># 一次设置 4 个 key</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> KEYS *o* <font color = "red"># KEYS h*llo 匹配 hllo 和 heeeeello 等</font></a>
+            <br>1) "four"
+            <br>2) "two"
+            <br>3) "one"
+            <br><br>
+            <a>redis> KEYS t?? <font color = "red"># KEYS h?llo 匹配 hello ， hallo 和 hxllo 等</font></a>
+            <br>1) "two"
+            <br><br>
+            <a>redis> KEYS t[w]* <font color = "red"># KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo</font></a>
+            <br>1) "two"
+            <br><br>
+            <a>redis> KEYS * <font color = "red"># 匹配数据库内所有 key</font></a>
+            <br>1) "four"
+            <br>2) "three"
+            <br>3) "two"
+            <br>4) "one"
+        </div>
+        <hr>
 
-    <h2>PEXPIREAT</h2>
-    <p>这个命令和 EXPIREAT 命令类似，但它以毫秒为单位设置 key 的过期 unix 时间戳，而不是像 EXPIREAT 那样，以秒为单位</p>
-    <div>       
-        <a>redis> SET mykey "Hello"
-        <br>OK</a>
-        <br><br>
-        <a>redis> PEXPIREAT mykey 1555555555005
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL mykey <font color = "red"># TTL 返回秒</font>
-        <br>(integer) 223157079</a>
-        <br><br>
-        <a>redis> PTTL mykey <font color = "red"># PTTL 返回毫秒</font>
-        <br>(integer) 223157079318</a>
-    </div>
-    <hr>
+        <h2>PTTL</h2>
+        <p>这个命令类似于 TTL 命令，但它以毫秒为单位返回 key 的剩余生存时间，而不是像 TTL 命令那样，以秒为单位。当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以毫秒为单位，返回 key 的剩余生存时间。在 Redis 2.8 以前，当 key 不存在，或者 key 没有设置剩余生存时间时，命令都返回 -1</p>
+        <div>       
+            <a>redis> PEXPIRE key 10086 </a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> PTTL key </a>
+            <br>(integer) 6179
+        </div>
+        <hr>
 
-    <h2>PTTL</h2>
-    <p>这个命令类似于 TTL 命令，但它以毫秒为单位返回 key 的剩余生存时间，而不是像 TTL 命令那样，以秒为单位。当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以毫秒为单位，返回 key 的剩余生存时间。在 Redis 2.8 以前，当 key 不存在，或者 key 没有设置剩余生存时间时，命令都返回 -1</p>
-    <div>       
-        <a>redis> PEXPIRE key 10086
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> PTTL key
-        <br>(integer) 6179</a>
-    </div>
-    <hr>
+        <h2>RANDOMKEY</h2>
+        <p>从当前数据库中随机返回(不删除)一个 key。当数据库不为空时，返回一个 key 。当数据库为空时，返回 nil</p>
+        <div>       
+            <a>redis> MSET fruit "apple" drink "beer" food "cookies" <font color = "red"># 设置多个 key</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> RANDOMKEY </a>
+            <br>"fruit"
+            <br><br>
+            <a>redis> RANDOMKEY </a>
+            <br>"food"
+        </div>
+        <hr>
 
-    <h2>RANDOMKEY</h2>
-    <p>从当前数据库中随机返回(不删除)一个 key。当数据库不为空时，返回一个 key 。当数据库为空时，返回 nil</p>
-    <div>       
-        <a>redis> MSET fruit "apple" drink "beer" food "cookies" <font color = "red"># 设置多个 key</font>
-        <br>OK</a>
-        <br><br>
-        <a>redis> RANDOMKEY
-        <br>"fruit"</a>
-        <br><br>
-        <a>redis> RANDOMKEY
-        <br>"food"</a>
-    </div>
-    <hr>
+            <h2>SORT</h2>
+            <p>返回或保存给定列表、集合、有序集合 key 中经过排序的元素</p>
+            <div>
+                <h5 style="color:blue">一般用法</h5>       
+                <a>redis> LPUSH today_cost 30 1.5 10 8 <font color = "red"># 开销金额列表</font></a>
+                <br>(integer) 4
+                <br><br>
+                <a>redis> SORT today_cost <font color = "red"># 默认（按数字）排序</font></a>
+                <br>1) "1.5"
+                <br>2) "8"
+                <br>3) "10"
+                <br>4) "30"
+                <br><br>
+                <a>redis 127.0.0.1:6379> SORT today_cost DESC <font color = "red"># 逆序排序</font></a>
+                <br>1) "30"
+                <br>2) "10"
+                <br>3) "8"
+                <br>4) "1.5"
+                <br><br>
+                <h5 style="color:blue">使用 ALPHA 修饰符</h5>
+                <a>redis> SORT website ALPHA <font color = "red"># 按字符排序</font></a>
+                <br>1) "www.infoq.com"
+                <br>2) "www.reddit.com"
+                <br>3) "www.slashdot.com"
+                <br><br> 
+                <h5 style="color:blue">使用 LIMIT 修饰符</h5>
+                <a>redis 127.0.0.1:6379> RPUSH rank 1 3 5 7 9 <font color = "red"># 添加测试数据，列表值为 1 指 10</font></a>
+                <br>(integer) 5
+                <br><br> 
+                <a>redis 127.0.0.1:6379> RPUSH rank 2 4 6 8 10 </a>
+                <br>(integer) 10
+                <br><br>
+                <a>redis 127.0.0.1:6379> SORT rank LIMIT 0 5 <font color = "red"># 返回列表中最小的 5 个值</font></a>
+                <br>1) "1"
+                <br>2) "2"
+                <br>3) "3"
+                <br>4) "4"
+                <br>5) "5"
+                <br><br>
+                <a>redis 127.0.0.1:6379> SORT rank LIMIT 0 5 DESC <font color = "red"># 逆序排序 返回列表中最大的 5 个值</font></a>
+                <br>1) "10"
+                <br>2) "9"
+                <br>3) "8"
+                <br>4) "7"
+                <br>5) "6"
+                <br><br> 
+                <table border="1">
+                    <tr>
+                        <td>uid</td><td>user_name_{uid}</td><td>user_level_{uid}</td>
+                    </tr>
+                    <tr>
+                        <td>1</td><td>admin</td><td>9999</td>
+                    </tr>
+                    <tr>
+                        <td>2</td><td>jack</td><td>10</td>
+                    </tr>
+                    <tr>
+                        <td>3</td><td>peter</td><td>25</td>
+                    </tr>
+                    <tr>
+                        <td>4</td><td>mary</td><td>70</td>
+                    </tr>
+                </table> <font color = "red">注释：以下修饰符需要使用的示例表</font>
+                <h5 style="color:blue">使用 BY 修饰符</h5>
+                <a>redis 127.0.0.1:6379> SORT uid BY user_level_* <font color = "red"># 通过使用 BY 选项，可以让 uid 按其他键的元素来排序</font></a>
+                <br>1) "2"      # jack , level = 10
+                <br>2) "3"      # peter, level = 25
+                <br>3) "4"      # mary, level = 70
+                <br>4) "1"      # admin, level = 9999
+                <br><br> 
+                <h5 style="color:blue">使用 GET 修饰符</h5>
+                <a>redis 127.0.0.1:6379> SORT uid GET user_name_* <font color = "red"># 使用 GET 选项， 可以根据排序的结果来取出相应的键值</font></a>
+                <br>1) "admin"
+                <br>2) "jack"
+                <br>3) "peter"
+                <br>4) "mary"
+                <br><br> 
+                <h5 style="color:blue">组合使用 BY 和 GET</h5>
+                <a>redis 127.0.0.1:6379> SORT uid BY user_level_* GET user_name_* <font color = "red"># 通过组合使用 BY 和 GET ， 可以让排序结果以更直观的方式显示出来</font></a>
+                <br>1) "jack"       # level = 10
+                <br>2) "peter"      # level = 25
+                <br>3) "mary"       # level = 70
+                <br>4) "admin"      # level = 9999
+                <br><br>
+                <p>SORT 未完待续。。。</p>
+            </div>
+            <hr>
 
-    <h2>RENAME</h2>
-    <p>将 key 改名为 newkey 。当 key 和 newkey 相同，或者 key 不存在时，返回一个错误。</p>
-    <div>       
-        <a>redis> SET pc "lenovo"
-        <br>OK</a>
-        <br><br>
-        <a>redis> SET personal_computer "dell"
-        <br>OK</a>
-        <br><br>
-        <a>redis> RENAME pc personal_computer <font color = "red"># newkey 已存在时， RENAME 会覆盖旧 newkey</font>
-        <br>OK</a>
-        <br><br>
-        <a>redis> GET pc
-        <br>(nil)</a>
-        <br><br>
-        <a>redis:1> GET personal_computer <font color = "red"># 原来的值 dell 被覆盖了</font>
-        <br>"lenovo"</a>
-    </div>
-    <hr>
+            <h2>TTL</h2>
+            <p>以秒为单位，返回给定 key 的剩余生存时间。当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以秒为单位，返回 key 的剩余生存时间。在 Redis 2.8 以前，当 key 不存在，或者 key 没有设置剩余生存时间时，命令都返回 -1</p>
+            <div>       
+                <a>redis> EXPIRE key 10086 </a>
+                <br>(integer) 1
+                <br><br>
+                <a>redis> TTL key </a>
+                <br>(integer) 10084
+            </div>
+            <hr>
 
-    <h2>RENAMENX</h2>
-    <p>当且仅当 newkey 不存在时，将 key 改名为 newkey。当 key 不存在时，返回一个错误。修改成功时，返回 1 。如果 newkey 已经存在，返回 0 </p>
-    <div>       
-        <a>redis> SET player "MPlyaer"
-        <br>OK</a>
-        <br><br>
-        <a>redis> EXISTS best_player
-        <br>(integer) 0</a>
-        <br><br>
-        <a>redis> RENAMENX player best_player
-        <br>(integer) 1</a>
-    </div>
-    <hr>
+            <h2>TYPE</h2>
+            <p>返回 key 所储存的值的类型。none (key不存在)\string (字符串)\list (列表)\set (集合)\zset (有序集)\hash (哈希表)</p>
+            <div>       
+                <a>redis> SET weather "sunny" </a>
+                <br>OK
+                <br><br>
+                <a>redis> TYPE weather </a>
+                <br>string
+            </div>
+            <hr>
 
-    <h2>RESTORE</h2>
-    <p>反序列化给定的序列化值，并将它和给定的 key 关联</p>
-    <div>       
-        <a>
-        <br></a><font color = "red"># 未理解，暂不举例</font>
-    </div>
     <hr>
+    <h2 style="color:blue;">unknown</h2>
+    
+        <h2>MIGRATE</h2>
+        <p>将 key 原子性地从当前实例传送到目标实例的指定数据库上，一旦传送成功， key 保证会出现在目标实例上，而当前实例上的 key 会被删除</p>
+        <div>       
+            <a><br><font color = "red"># 未理解，暂不举例</font></a>
+        </div>
+        <hr>
+    
+        <h2>OBJECT</h2>
+        <p>OBJECT 命令允许从内部察看给定 key 的 Redis 对象</p>
+        <div>       
+            <a><br><font color = "red"># 未理解，暂不举例</font></a>
+        </div>
+        <hr>
 
-    <h2>SORT</h2>
-    <p>返回或保存给定列表、集合、有序集合 key 中经过排序的元素</p>
-    <div>
-        <h5 style="color:blue">一般用法</h5>       
-        <a>redis> LPUSH today_cost 30 1.5 10 8 <font color = "red"># 开销金额列表</font>
-        <br>(integer) 4</a>
-        <br><br>
-        <a>redis> SORT today_cost <font color = "red"># 默认（按数字）排序</font>
-        <br>1) "1.5"</a>
-        <br>2) "8"</a>
-        <br>3) "10"</a>
-        <br>4) "30"</a>
-        <br><br>
-        <a>redis 127.0.0.1:6379> SORT today_cost DESC <font color = "red"># 逆序排序</font>
-        <br>1) "30"</a>
-        <br>2) "10"</a>
-        <br>3) "8"</a>
-        <br>4) "1.5"</a>
-        <br><br>
-        <h5 style="color:blue">使用 ALPHA 修饰符</h5>
-        <a>redis> SORT website ALPHA <font color = "red"># 按字符排序</font>
-        <br>1) "www.infoq.com"</a>
-        <br>2) "www.reddit.com"</a>
-        <br>3) "www.slashdot.com"</a>
-        <br><br> 
-        <h5 style="color:blue">使用 LIMIT 修饰符</h5>
-        <a>redis 127.0.0.1:6379> RPUSH rank 1 3 5 7 9 <font color = "red"># 添加测试数据，列表值为 1 指 10</font>
-        <br>(integer) 5</a>
-        <br><br> 
-        <a>redis 127.0.0.1:6379> RPUSH rank 2 4 6 8 10
-        <br>(integer) 10</a>
-        <br><br>
-        <a>redis 127.0.0.1:6379> SORT rank LIMIT 0 5 <font color = "red"># 返回列表中最小的 5 个值</font>
-        <br>1) "1"</a>
-        <br>2) "2"</a>
-        <br>3) "3"</a>
-        <br>4) "4"</a>
-        <br>5) "5"</a>
-        <br><br>
-        <a>redis 127.0.0.1:6379> SORT rank LIMIT 0 5 DESC <font color = "red"># 逆序排序 返回列表中最大的 5 个值</font>
-        <br>1) "10"</a>
-        <br>2) "9"</a>
-        <br>3) "8"</a>
-        <br>4) "7"</a>
-        <br>5) "6"</a>
-        <br><br> 
-        <table border="1">
-            <tr>
-                <td>uid</td><td>user_name_{uid}</td><td>user_level_{uid}</td>
-            </tr>
-            <tr>
-                <td>1</td><td>admin</td><td>9999</td>
-            </tr>
-            <tr>
-                <td>2</td><td>jack</td><td>10</td>
-            </tr>
-            <tr>
-                <td>3</td><td>peter</td><td>25</td>
-            </tr>
-            <tr>
-                <td>4</td><td>mary</td><td>70</td>
-            </tr>
-        </table> <font color = "red">注释：以下修饰符需要使用的示例表</font>
-        <h5 style="color:blue">使用 BY 修饰符</h5>
-        <a>redis 127.0.0.1:6379> SORT uid BY user_level_* <font color = "red"># 通过使用 BY 选项，可以让 uid 按其他键的元素来排序</font>
-        <br>1) "2"      # jack , level = 10</a>
-        <br>2) "3"      # peter, level = 25</a>
-        <br>3) "4"      # mary, level = 70</a>
-        <br>4) "1"      # admin, level = 9999</a>
-        <br><br> 
-        <h5 style="color:blue">使用 GET 修饰符</h5>
-        <a>redis 127.0.0.1:6379> SORT uid GET user_name_* <font color = "red"># 使用 GET 选项， 可以根据排序的结果来取出相应的键值</font>
-        <br>1) "admin"</a>
-        <br>2) "jack"</a>
-        <br>3) "peter"</a>
-        <br>4) "mary"</a>
-        <br><br> 
-        <h5 style="color:blue">组合使用 BY 和 GET</h5>
-        <a>redis 127.0.0.1:6379> SORT uid BY user_level_* GET user_name_* <font color = "red"># 通过组合使用 BY 和 GET ， 可以让排序结果以更直观的方式显示出来</font>
-        <br>1) "jack"       # level = 10</a>
-        <br>2) "peter"      # level = 25</a>
-        <br>3) "mary"       # level = 70</a>
-        <br>4) "admin"      # level = 9999</a>
-        <br><br>
-        <p>SORT 未完待续。。。</p>
-    </div>
-    <hr>
+        <h2>RESTORE</h2>
+        <p>反序列化给定的序列化值，并将它和给定的 key 关联</p>
+        <div>       
+            <a><br><font color = "red"># 未理解，暂不举例</font></a>
+        </div>
+        <hr>
 
-    <h2>TTL</h2>
-    <p>以秒为单位，返回给定 key 的剩余生存时间。当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以秒为单位，返回 key 的剩余生存时间。在 Redis 2.8 以前，当 key 不存在，或者 key 没有设置剩余生存时间时，命令都返回 -1</p>
-    <div>       
-        <a>redis> EXPIRE key 10086
-        <br>(integer) 1</a>
-        <br><br>
-        <a>redis> TTL key
-        <br>(integer) 10084</a>
-    </div>
-    <hr>
+        <h2>SCAN</h2>
+        <p>用于迭代当前数据库中的数据库键</p>
+        <div>       
+            <a><br><font color = "red"># 未理解，暂不举例</font></a>
+        </div>
+        <hr>
 
-    <h2>TYPE</h2>
-    <p>返回 key 所储存的值的类型。none (key不存在)\string (字符串)\list (列表)\set (集合)\zset (有序集)\hash (哈希表)</p>
-    <div>       
-        <a>redis> SET weather "sunny"
-        <br>OK</a>
-        <br><br>
-        <a>redis> TYPE weather
-        <br>string</a>
-    </div>
     <hr>
-
-    <h2>SCAN</h2>
-    <p>用于迭代当前数据库中的数据库键。</p>
-    <div>       
-        <p>SCAN 未完待续。。。</p>
-    </div>
-    <hr>
+    
 <!--
     <h2>key</h2>
     <p>comment</p>
     <div>       
-        <a> <font color = "red"># 备注</font>
-        <br></a>
+        <a> <font color = "red"></font></a>
+        <br>
         <br><br>
-        <a> <font color = "red"># 备注</font>
-        <br></a>
+        <a> <font color = "red"></font></a>
+        <br>
         <br><br>
-        <a> <font color = "red"># 备注</font>
-        <br></a>
+        <a> <font color = "red"></font></a>
+        <br>
         <br><br>
-        <a> <font color = "red"># 备注</font>
-        <br></a>
+        <a> <font color = "red"></font></a>
+        <br>
     </div>
     <hr>
 -->
