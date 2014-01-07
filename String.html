@@ -5,278 +5,295 @@
 </head>
 <body>
 
-    <h2>APPEND</h2>
-    <p>如果 key 已经存在并且是一个字符串， APPEND 命令将 value 追加到 key 原来的值的末尾。如果 key 不存在， APPEND 就简单地将给定 key 设为 value ，就像执行 SET key value 一样</p>
-    <div>       
-        <a>redis> APPEND myphone " - 1110" <font color = "red"># 对已存在的字符串进行 APPEND</font></a>
-        <br>(integer) 12
-        <br><br>
-        <a>redis> GET myphone <font color = "red"></font></a>
-        <br>"nokia - 1110"
-    </div>
+    <h2 style="color:blue;">INSERT</h2>
+
+        <h2>APPEND</h2>
+        <p>如果 key 已经存在并且是一个字符串， APPEND 命令将 value 追加到 key 原来的值的末尾。如果 key 不存在， APPEND 就简单地将给定 key 设为 value ，就像执行 SET key value 一样</p>
+        <div>       
+            <a>redis> APPEND myphone " - 1110" <font color = "red"># 对已存在的字符串进行 APPEND</font></a>
+            <br>(integer) 12
+            <br><br>
+            <a>redis> GET myphone <font color = "red"></font></a>
+            <br>"nokia - 1110"
+        </div>
+        <hr>
+
+        <h2>MSET</h2>
+        <p>同时设置一个或多个 key-value 对</p>
+        <div>       
+            <a>redis> MSET date "2012.3.30" time "11:00 a.m." weather "sunny" <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> MGET date time weather <font color = "red"></font></a>
+            <br>1) "2012.3.30"
+            <br>2) "11:00 a.m."
+            <br>3) "sunny"
+        </div>
+        <hr>
+
+        <h2>MSETNX</h2>
+        <p>同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在</p>
+        <div>       
+            <a>redis> MSETNX rmdbs "MySQL" nosql "MongoDB" key-value-store "redis" <font color = "red"># 对不存在的 key 进行 MSETNX</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> MGET rmdbs nosql key-value-store <font color = "red"></font></a>
+            <br>1) "MySQL"
+            <br>2) "MongoDB"
+            <br>3) "redis"
+        </div>
+        <hr>
+
+        <h2>SET</h2>
+        <p>将字符串值 value 关联到 key</p>
+        <div>       
+            <a>redis 127.0.0.1:6379> SET key "value" <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis 127.0.0.1:6379> GET key <font color = "red"></font></a>
+            <br>"value"
+        </div>
+        <hr>
+
+        <h2>SETNX</h2>
+        <p>将 key 的值设为 value ，当且仅当 key 不存在</p>
+        <div>       
+            <a>redis> EXISTS job <font color = "red"># job 不存在</font></a>
+            <br>(integer) 0
+            <br><br>
+            <a>redis> SETNX job "programmer" <font color = "red"># job 设置成功</font></a>
+            <br>(integer) 1
+            <br><br>
+            <a>redis> SETNX job "code-farmer" <font color = "red"># 尝试覆盖 job ，失败</font></a>
+            <br>(integer) 0
+            <br><br>
+            <a>redis> GET job <font color = "red"># 没有被覆盖</font></a>
+            <br>"programmer"
+        </div>
+        <hr>
+
+    <hr>
+    <h2 style="color:blue;">DELETE</h2>
+
+        <h2>PSETEX</h2>
+        <p>这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位</p>
+        <div>       
+            <a>redis> PSETEX mykey 1000 "Hello" <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> PTTL mykey <font color = "red"></font></a>
+            <br>(integer) 999
+            <br><br>
+            <a>redis> GET mykey <font color = "red"></font></a>
+            <br>"Hello"
+        </div>
+        <hr>
+
+        <h2>SETEX</h2>
+        <p>将值 value 关联到 key ，并将 key 的生存时间设为 seconds (以秒为单位)</p>
+        <div>       
+            <a>redis> SETEX cache_user_id 60 10086 <font color = "red"># 在 key 不存在时进行 SETEX</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> GET cache_user_id <font color = "red"># 值</font></a>
+            <br>"10086"
+            <br><br>
+            <a>redis> TTL cache_user_id <font color = "red"># 剩余生存时间</font></a>
+            <br>(integer) 49
+        </div>
+        <hr>
+
+    <hr>
+    <h2 style="color:blue;">UPDATE</h2>
+
+        <h2>DECR</h2>
+        <p>将 key 中储存的数字值减一。如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECR 操作。如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。</p>
+        <div>       
+            <a>redis> SET failure_times 10 <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> DECR failure_times <font color = "red"></font></a>
+            <br>(integer) 9
+        </div>
+        <hr>
+
+        <h2>DECRBY</h2>
+        <p>将 key 所储存的值减去减量 decrement 。如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECRBY 操作。如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。</p>
+        <div>       
+            <a>redis> SET count 100 <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> DECRBY count 20 <font color = "red"></font></a>
+            <br>(integer) 80
+        </div>
+        <hr>
+
+        <h2>GETSET</h2>
+        <p>将给定 key 的值设为 value ，并返回 key 的旧值。当 key 存在但不是字符串类型时，返回一个错误</p>
+        <div>       
+            <a>redis> GETSET db mongodb <font color = "red"># 没有旧值，返回 nil</font></a>
+            <br>(nil)
+            <br><br>
+            <a>redis> GET db <font color = "red"></font></a>
+            <br>"mongodb"
+            <br><br>
+            <a>redis> GETSET db redis <font color = "red"># 返回旧值 mongodb</font></a>
+            <br>"mongodb"
+            <br><br>
+            <a>redis> GET db <font color = "red"></font></a>
+            <br>"redis"
+        </div>
+        <hr>
+
+        <h2>INCR</h2>
+        <p>将 key 中储存的数字值增一</p>
+        <div>       
+            <a>redis> SET page_view 20 <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> INCR page_view <font color = "red"></font></a>
+            <br>(integer) 21
+            <br><br>
+            <a>redis> GET page_view <font color = "red"># 数字值在 Redis 中以字符串的形式保存</font></a>
+            <br>"21"
+        </div>
+        <hr>
+
+        <h2>INCRBY</h2>
+        <p>将 key 所储存的值加上增量 increment</p>
+        <div>       
+            <a>redis> SET rank 50 <font color = "red"># key 存在且是数字值</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> INCRBY rank 20 <font color = "red"></font></a>
+            <br>(integer) 70
+            <br><br>
+            <a>redis> GET rank <font color = "red"></font></a>
+            <br>"70"
+        </div>
+        <hr>
+
+        <h2>INCRBYFLOAT</h2>
+        <p>为 key 中所储存的值加上浮点数增量 increment</p>
+        <div>       
+            <a>redis> SET mykey 10.50 <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> INCRBYFLOAT mykey 0.1 <font color = "red"></font></a>
+            <br>"10.6"
+        </div>
+        <hr>
+
+        <h2>SETRANGE</h2>
+        <p>用 value 参数覆写(overwrite)给定 key 所储存的字符串值，从偏移量 offset 开始</p>
+        <div>       
+            <a>redis> SET greeting "hello world" <font color = "red"># 对非空字符串进行 SETRANGE</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> SETRANGE greeting 6 "Redis" <font color = "red"></font></a>
+            <br>(integer) 11
+            <br><br>
+            <a>redis> GET greeting <font color = "red"></font></a>
+            <br>"hello Redis"
+        </div>
+        <hr>
+
+    <hr>
+    <h2 style="color:blue;">SELECT</h2>
+
+        <h2>GET</h2>
+        <p>返回 key 所关联的字符串值。GET 只能用于处理字符串值</p>
+        <div>       
+            <a>redis> SET db redis <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> GET db <font color = "red"></font></a>
+            <br>"redis"
+        </div>
+        <hr>
+
+        <h2>GETRANGE</h2>
+        <p>返回 key 中字符串值的子字符串，字符串的截取范围由 start 和 end 两个偏移量决定(包括 start 和 end 在内)。负数偏移量表示从字符串最后开始计数， -1 表示最后一个字符， -2 表示倒数第二个，以此类推。</p>
+        <div>       
+            <a>redis> SET greeting "hello, my friend" <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> GETRANGE greeting 0 4 <font color = "red"># 返回索引0-4的字符，包括4</font></a>
+            <br>"hello"
+            <br><br>
+            <a>redis> GETRANGE greeting -3 -1 <font color = "red"># 负数索引</font></a>
+            <br>"end"
+            <br><br>
+            <a>redis> GETRANGE greeting 0 1008611 <font color = "red"># 值域范围不超过实际字符串，超过部分自动被符略</font></a>
+            <br>"hello, my friend"
+        </div>
+        <hr>
+
+        <h2>MGET</h2>
+        <p>返回所有(一个或多个)给定 key 的值</p>
+        <div>       
+            <a>redis> SET redis redis.com <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> SET mongodb mongodb.org <font color = "red"></font></a>
+            <br>OK
+            <br><br>
+            <a>redis> MGET redis mongodb <font color = "red"></font></a>
+            <br>1) "redis.com"
+            <br>2) "mongodb.org"
+            <br><br>
+            <a>redis> MGET redis mongodb mysql <font color = "red"># 不存在的 mysql 返回 nil</font></a>
+            <br>1) "redis.com"
+            <br>2) "mongodb.org"
+            <br>3) (nil)
+        </div>
+        <hr>
+
+        <h2>STRLEN</h2>
+        <p>返回 key 所储存的字符串值的长度</p>
+        <div>       
+            <a>redis> SET mykey "Hello world" <font color = "red"># 获取字符串的长度</font></a>
+            <br>OK
+            <br><br>
+            <a>redis> STRLEN mykey <font color = "red"></font></a>
+            <br>(integer) 11
+        </div>
+        <hr>
+
+    <hr>
+    <h2 style="color:blue;">unknown</h2>
+
+        <h2>BITCOUNT</h2>
+        <p>计算给定字符串中，被设置为 1 的比特位的数量</p>
+        <div>       
+            <p>BITCOUNT 未完待续。。。</p>
+        </div>
+        <hr>
+
+        <h2>BITOP</h2>
+        <p>对一个或多个保存二进制位的字符串 key 进行位元操作，并将结果保存到 destkey 上</p>
+        <div>       
+            <p>BITOP 未完待续。。。</p>
+        </div>
+        <hr>
+
+        <h2>GETBIT</h2>
+        <p>对 key 所储存的字符串值，获取指定偏移量上的位</p>
+        <div>       
+            <p>GETBIT 未完待续。。。</p>
+        </div>
+        <hr>
+
+        <h2>SETBIT</h2>
+        <p>对 key 所储存的字符串值，设置或清除指定偏移量上的位</p>
+        <div>       
+            <a>SETBIT 未完待续。。。 <font color = "red"></font></a>
+            <br>
+        </div>
+        <hr>
+
     <hr>
 
-    <h2>BITCOUNT</h2>
-    <p>计算给定字符串中，被设置为 1 的比特位的数量</p>
-    <div>       
-        <p>BITCOUNT 未完待续。。。</p>
-    </div>
-    <hr>
-
-    <h2>BITOP</h2>
-    <p>对一个或多个保存二进制位的字符串 key 进行位元操作，并将结果保存到 destkey 上</p>
-    <div>       
-        <p>BITOP 未完待续。。。</p>
-    </div>
-    <hr>
-
-    <h2>DECR</h2>
-    <p>将 key 中储存的数字值减一。如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECR 操作。如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。</p>
-    <div>       
-        <a>redis> SET failure_times 10 <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> DECR failure_times <font color = "red"></font></a>
-        <br>(integer) 9
-    </div>
-    <hr>
-
-    <h2>DECRBY</h2>
-    <p>将 key 所储存的值减去减量 decrement 。如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECRBY 操作。如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。</p>
-    <div>       
-        <a>redis> SET count 100 <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> DECRBY count 20 <font color = "red"></font></a>
-        <br>(integer) 80
-    </div>
-    <hr>
-
-    <h2>GET</h2>
-    <p>返回 key 所关联的字符串值。GET 只能用于处理字符串值</p>
-    <div>       
-        <a>redis> SET db redis <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> GET db <font color = "red"></font></a>
-        <br>"redis"
-    </div>
-    <hr>
-
-    <h2>GETBIT</h2>
-    <p>对 key 所储存的字符串值，获取指定偏移量上的位</p>
-    <div>       
-        <p>GETBIT 未完待续。。。</p>
-    </div>
-    <hr>
-
-    <h2>GETRANGE</h2>
-    <p>返回 key 中字符串值的子字符串，字符串的截取范围由 start 和 end 两个偏移量决定(包括 start 和 end 在内)。负数偏移量表示从字符串最后开始计数， -1 表示最后一个字符， -2 表示倒数第二个，以此类推。</p>
-    <div>       
-        <a>redis> SET greeting "hello, my friend" <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> GETRANGE greeting 0 4 <font color = "red"># 返回索引0-4的字符，包括4</font></a>
-        <br>"hello"
-        <br><br>
-        <a>redis> GETRANGE greeting -3 -1  <font color = "red"># 负数索引</font></a>
-        <br>"end"
-        <br><br>
-        <a>redis> GETRANGE greeting 0 1008611 <font color = "red"># 值域范围不超过实际字符串，超过部分自动被符略</font></a>
-        <br>"hello, my friend"
-    </div>
-    <hr>
-
-    <h2>GETSET</h2>
-    <p>将给定 key 的值设为 value ，并返回 key 的旧值。当 key 存在但不是字符串类型时，返回一个错误</p>
-    <div>       
-        <a>redis> GETSET db mongodb <font color = "red"># 没有旧值，返回 nil</font></a>
-        <br>(nil)
-        <br><br>
-        <a>redis> GET db <font color = "red"></font></a>
-        <br>"mongodb"
-        <br><br>
-        <a>redis> GETSET db redis <font color = "red"># 返回旧值 mongodb</font></a>
-        <br>"mongodb"
-        <br><br>
-        <a>redis> GET db <font color = "red"></font></a>
-        <br>"redis"
-    </div>
-    <hr>
-
-    <h2>INCR</h2>
-    <p>将 key 中储存的数字值增一</p>
-    <div>       
-        <a>redis> SET page_view 20 <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> INCR page_view <font color = "red"></font></a>
-        <br>(integer) 21
-        <br><br>
-        <a>redis> GET page_view <font color = "red"># 数字值在 Redis 中以字符串的形式保存</font></a>
-        <br>"21"
-    </div>
-    <hr>
-
-    <h2>INCRBY</h2>
-    <p>将 key 所储存的值加上增量 increment</p>
-    <div>       
-        <a>redis> SET rank 50 <font color = "red"># key 存在且是数字值</font></a>
-        <br>OK
-        <br><br>
-        <a>redis> INCRBY rank 20 <font color = "red"></font></a>
-        <br>(integer) 70
-        <br><br>
-        <a>redis> GET rank <font color = "red"></font></a>
-        <br>"70"
-    </div>
-    <hr>
-
-    <h2>INCRBYFLOAT</h2>
-    <p>为 key 中所储存的值加上浮点数增量 increment</p>
-    <div>       
-        <a>redis> SET mykey 10.50 <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> INCRBYFLOAT mykey 0.1 <font color = "red"></font></a>
-        <br>"10.6"
-    </div>
-    <hr>
-
-    <h2>MGET</h2>
-    <p>返回所有(一个或多个)给定 key 的值</p>
-    <div>       
-        <a>redis> SET redis redis.com <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> SET mongodb mongodb.org <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> MGET redis mongodb <font color = "red"></font></a>
-        <br>1) "redis.com"
-        <br>2) "mongodb.org"
-        <br><br>
-        <a>redis> MGET redis mongodb mysql <font color = "red"># 不存在的 mysql 返回 nil</font></a>
-        <br>1) "redis.com"
-        <br>2) "mongodb.org"
-        <br>3) (nil)
-    </div>
-    <hr>
-
-    <h2>MSET</h2>
-    <p>同时设置一个或多个 key-value 对</p>
-    <div>       
-        <a>redis> MSET date "2012.3.30" time "11:00 a.m." weather "sunny" <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> MGET date time weather <font color = "red"></font></a>
-        <br>1) "2012.3.30"
-        <br>2) "11:00 a.m."
-        <br>3) "sunny"
-    </div>
-    <hr>
-
-    <h2>MSETNX</h2>
-    <p>同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在</p>
-    <div>       
-        <a>redis> MSETNX rmdbs "MySQL" nosql "MongoDB" key-value-store "redis" <font color = "red"># 对不存在的 key 进行 MSETNX</font></a>
-        <br>(integer) 1
-        <br><br>
-        <a>redis> MGET rmdbs nosql key-value-store <font color = "red"></font></a>
-        <br>1) "MySQL"
-        <br>2) "MongoDB"
-        <br>3) "redis"
-    </div>
-    <hr>
-
-    <h2>PSETEX</h2>
-    <p>这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位</p>
-    <div>       
-        <a>redis> PSETEX mykey 1000 "Hello" <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis> PTTL mykey <font color = "red"></font></a>
-        <br>(integer) 999
-        <br><br>
-        <a>redis> GET mykey <font color = "red"></font></a>
-        <br>"Hello"
-    </div>
-    <hr>
-
-    <h2>SET</h2>
-    <p>将字符串值 value 关联到 key</p>
-    <div>       
-        <a>redis 127.0.0.1:6379> SET key "value" <font color = "red"></font></a>
-        <br>OK
-        <br><br>
-        <a>redis 127.0.0.1:6379> GET key <font color = "red"></font></a>
-        <br>"value"
-    </div>
-    <hr>
-
-    <h2>SETBIT</h2>
-    <p>对 key 所储存的字符串值，设置或清除指定偏移量上的位</p>
-    <div>       
-        <a>SETBIT 未完待续。。。 <font color = "red"></font></a>
-        <br>
-    </div>
-    <hr>
-
-    <h2>SETEX</h2>
-    <p>将值 value 关联到 key ，并将 key 的生存时间设为 seconds (以秒为单位)</p>
-    <div>       
-        <a>redis> SETEX cache_user_id 60 10086 <font color = "red"># 在 key 不存在时进行 SETEX</font></a>
-        <br>OK
-        <br><br>
-        <a>redis> GET cache_user_id <font color = "red"># 值</font></a>
-        <br>"10086"
-        <br><br>
-        <a>redis> TTL cache_user_id <font color = "red"># 剩余生存时间</font></a>
-        <br>(integer) 49
-    </div>
-    <hr>
-
-    <h2>SETNX</h2>
-    <p>将 key 的值设为 value ，当且仅当 key 不存在</p>
-    <div>       
-        <a>redis> EXISTS job <font color = "red"># job 不存在</font></a>
-        <br>(integer) 0
-        <br><br>
-        <a>redis> SETNX job "programmer" <font color = "red"># job 设置成功</font></a>
-        <br>(integer) 1
-        <br><br>
-        <a>redis> SETNX job "code-farmer" <font color = "red"># 尝试覆盖 job ，失败</font></a>
-        <br>(integer) 0
-        <br><br>
-        <a>redis> GET job <font color = "red"># 没有被覆盖</font></a>
-        <br>"programmer"
-    </div>
-    <hr>
-
-    <h2>SETRANGE</h2>
-    <p>用 value 参数覆写(overwrite)给定 key 所储存的字符串值，从偏移量 offset 开始</p>
-    <div>       
-        <a>redis> SET greeting "hello world" <font color = "red"># 对非空字符串进行 SETRANGE</font></a>
-        <br>OK
-        <br><br>
-        <a>redis> SETRANGE greeting 6 "Redis" <font color = "red"></font></a>
-        <br>(integer) 11
-        <br><br>
-        <a>redis> GET greeting <font color = "red"></font></a>
-        <br>"hello Redis"
-    </div>
-    <hr>
-
-    <h2>STRLEN</h2>
-    <p>返回 key 所储存的字符串值的长度</p>
-    <div>       
-        <a>redis> SET mykey "Hello world" <font color = "red"># 获取字符串的长度</font></a>
-        <br>OK
-        <br><br>
-        <a>redis> STRLEN mykey <font color = "red"></font></a>
-        <br>(integer) 11
-    </div>
-    <hr>
 <!--
     <h2>key</h2>
     <p>comment</p>
