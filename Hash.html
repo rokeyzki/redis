@@ -19,6 +19,11 @@
             <a>redis> HGET website yahoo <font color = "red"></font></a>
             <br>"www.yahoo.com"
         </div>
+        <div>
+            <br><br>
+            <a>hMset <font color = "red">向名称为key的hash中批量添加元素</font></a>
+            <br>$redis->hMset('user:1', array('name' => 'Joe', 'salary' => 2000));
+        </div>
         <hr>
 
         <h2>HSET</h2>
@@ -29,6 +34,11 @@
             <br><br>
             <a>redis> HSET website google "www.google.com" <font color = "red"># 覆盖一个旧域</font></a>
             <br>(integer) 0
+        </div>
+        <div>
+            <br><br>
+            <a>hSet <font color = "red">向名称为h的hash中添加元素key1—>hello</font></a>
+            <br>$redis->hSet('h', 'key1', 'hello');
         </div>
         <hr>
 
@@ -216,27 +226,6 @@
         <p>None</p>
 
     <hr>
-
-    
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!--
     <h2>key</h2>
